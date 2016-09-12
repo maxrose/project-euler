@@ -7,18 +7,23 @@ print("Welcome to Max's Project Euler playground")
 struct ProblemSelection : OptionSet {
     let rawValue: Int
     
-    static let none     = ProblemSelection(rawValue: 0)
-    static let problem1 = ProblemSelection(rawValue: 1 << 0)
-    static let problem2 = ProblemSelection(rawValue: 1 << 1)
-    static let problem3 = ProblemSelection(rawValue: 1 << 2)
-    static let problem4 = ProblemSelection(rawValue: 1 << 3)
-    static let problem5 = ProblemSelection(rawValue: 1 << 4)
+    static let none      = ProblemSelection(rawValue: 0)
+    static let problem1  = ProblemSelection(rawValue: 1 << 0)
+    static let problem2  = ProblemSelection(rawValue: 1 << 1)
+    static let problem3  = ProblemSelection(rawValue: 1 << 2)
+    static let problem4  = ProblemSelection(rawValue: 1 << 3)
+    static let problem5  = ProblemSelection(rawValue: 1 << 4)
+    static let problem6  = ProblemSelection(rawValue: 1 << 5)
+    static let problem7  = ProblemSelection(rawValue: 1 << 6)
+    static let problem8  = ProblemSelection(rawValue: 1 << 7)
+    static let problem9  = ProblemSelection(rawValue: 1 << 8)
+    static let problem10 = ProblemSelection(rawValue: 1 << 9)
     
-    static let all: ProblemSelection = [.problem1, .problem2, .problem3, .problem4, .problem5]
+    static let all: ProblemSelection = [.problem1, .problem2, .problem3, .problem4, .problem5,
+                                        .problem6, .problem7, .problem8, .problem9, .problem10]
 }
 // To save a little recomputation time, select the problems you'd like to see with the mask
-let problemMask: ProblemSelection = [.problem1, .problem2, .problem3, .problem4, .problem5]
-
+let problemMask: ProblemSelection = .problem9//[.problem1, .problem2, .problem3, .problem4, .problem5]
 
 // Utility functions.
 
@@ -61,6 +66,14 @@ func intPower(_ base: Int, _ exponent: Int) -> Int {
     return Int(pow(Double(base),Double(exponent)))
 }
 
+// Prints out formatted outputs.
+func printTestCase(_ result: Any) {
+    print("Sample case result:", result)
+}
+func printResultCase(_ result: Any) {
+    print("Application result:", result)
+}
+
 // Problem 1
 if problemMask.contains(.problem1) {
     print("\nProblem 1")
@@ -85,8 +98,8 @@ if problemMask.contains(.problem1) {
         return sum
     }
     
-    print("Example's test case:", sumOfProducts(baseValues: Set([3,5]), limit: 10))
-    print("Application Result: ", sumOfProducts(baseValues: Set([3,5]), limit: 1000))
+    printTestCase(sumOfProducts(baseValues: Set([3,5]), limit: 10))
+    printResultCase(sumOfProducts(baseValues: Set([3,5]), limit: 1000))
 }
 
 // Problem 2
@@ -109,8 +122,8 @@ if problemMask.contains(.problem2) {
         return sum
     }
     
-    print("Example's test case:", sumNumbersAndReturnEvenUnderLimit(num1: 1, num2: 2, lim: 90))
-    print("Application Result: ", sumNumbersAndReturnEvenUnderLimit(num1: 1, num2: 2, lim: 4000000))
+    printTestCase(sumNumbersAndReturnEvenUnderLimit(num1: 1, num2: 2, lim: 90))
+    printResultCase(sumNumbersAndReturnEvenUnderLimit(num1: 1, num2: 2, lim: 4000000))
 }
 
 // Problem 3
@@ -126,8 +139,8 @@ if problemMask.contains(.problem3) {
         return primeFactors.first!
     }
     
-    print("Example's test case:", largestPrimeFactorOf(13195))
-    print("Application Result: ", largestPrimeFactorOf(600851475143))
+    printTestCase(largestPrimeFactorOf(13195))
+    printResultCase(largestPrimeFactorOf(600851475143))
 }
 
 // Problem 4
@@ -184,7 +197,7 @@ if problemMask.contains(.problem4) {
         return maxPalindrome
     }
     
-    print("Example's test case:", largestPalindromicProduct(numDigits: 2))
+    printTestCase(largestPalindromicProduct(numDigits: 2))
     print("Application Result:  ", largestPalindromicProduct(numDigits: 3))
 }
 
@@ -227,6 +240,129 @@ if problemMask.contains(.problem5) {
         return product
     }
     
-    print("Example's test case:", smallestNumberDivisibleByValuesUpTo(10))
-    print("Application Result: ", smallestNumberDivisibleByValuesUpTo(20))
+    printTestCase(smallestNumberDivisibleByValuesUpTo(10))
+    printResultCase(smallestNumberDivisibleByValuesUpTo(20))
 }
+
+// Problem 6
+if problemMask.contains(.problem6) {
+    print("\nProblem 6")
+    print("The sum of the squares of the first ten natural numbers is, 1^2 + 2^2 + ... + 10^2 = 385")
+    print("The square of the sum of the first ten natural numbers is, (1 + 2 + ... + 10)^2 = 55^2 = 3025")
+    print("Hence the difference between the sum of the squares of the first ten natural numbers and the square of the sum is 3025 − 385 = 2640.")
+    print("Find the difference between the sum of the squares of the first one hundred natural numbers and the square of the sum.")
+    
+    func sumSquares(_ values: Array<Int>) -> Int {
+        return values.reduce(0, { $0 + $1*$1 });
+    }
+    
+    func squareSum(_ values: Array<Int>) -> Int {
+        let sum = values.reduce(0, +)
+        return sum * sum
+    }
+    
+    func differenceOfSquaresUpTo(_ cap: Int) -> Int {
+        let values = Array<Int>(1...cap)
+        return squareSum(values) - sumSquares(values)
+    }
+    
+    printTestCase(differenceOfSquaresUpTo(10))
+    printResultCase(differenceOfSquaresUpTo(100))
+}
+
+// Problem 7
+if problemMask.contains(.problem7) {
+    print("\nProblem 7")
+    print("By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.")
+    print("What is the 10 001st prime number?")
+    
+    func nthPrime(_ n: Int) -> Int {
+        var primes = [Int]()
+        var i = 2
+        while primes.count < n {
+            var isPrime = true
+            for p in primes {
+                if i % p == 0 {
+                    isPrime = false
+                    break
+                }
+            }
+            if isPrime {
+                primes.append(i)
+            }
+            i += 1
+        }
+        
+        return primes.last!
+    }
+    
+    printTestCase(nthPrime(6)) // 13
+    printResultCase(nthPrime(10001)) // 104743
+}
+
+// Problem 8
+if problemMask.contains(.problem8) {
+    print("\nProblem 8")
+    print("Number: 73167176531330624919225119674426574742355349194934...");
+    print("The four adjacent digits in the 1000-digit number that have the greatest product are 9 × 9 × 8 × 9 = 5832.")
+    print("Find the thirteen adjacent digits in the 1000-digit number that have the greatest product. What is the value of this product?")
+    
+    // Can't store the 1000 digit number as an int.
+    let largeDigitNumber = "7316717653133062491922511967442657474235534919493496983520312774506326239578318016984801869478851843858615607891129494954595017379583319528532088055111254069874715852386305071569329096329522744304355766896648950445244523161731856403098711121722383113622298934233803081353362766142828064444866452387493035890729629049156044077239071381051585930796086670172427121883998797908792274921901699720888093776657273330010533678812202354218097512545405947522435258490771167055601360483958644670632441572215539753697817977846174064955149290862569321978468622482839722413756570560574902614079729686524145351004748216637048440319989000889524345065854122758866688116427171479924442928230863465674813919123162824586178664583591245665294765456828489128831426076900422421902267105562632111110937054421750694165896040807198403850962455444362981230987879927244284909188845801561660979191338754992005240636899125607176060588611646710940507754100225698315520005593572972571636269561882670428252483600823257530420752963450"
+    
+    func largestProductOfContinuousDigits(_ digitCount: Int , _ n: String) -> Int {
+        var maxProduct = 0
+        var startIndex = 0
+        
+        while startIndex + digitCount <= n.characters.count {
+            let start = n.index(n.startIndex, offsetBy: startIndex)
+            let stop  = n.index(n.startIndex, offsetBy: startIndex + digitCount)
+            let slice = n.substring(with: Range(start..<stop))
+            
+            var consecutiveDigits = Int(slice)!
+            var product = 1
+            while consecutiveDigits >= 1 {
+                product *= consecutiveDigits % 10
+                consecutiveDigits /= 10
+            }
+            maxProduct = max(maxProduct, product)
+            
+            startIndex += 1
+        }
+        
+        return maxProduct
+    }
+    
+    printTestCase(largestProductOfContinuousDigits(4, largeDigitNumber))
+    printResultCase(largestProductOfContinuousDigits(13, largeDigitNumber))
+}
+
+//// Problem 9
+//if problemMask.contains(.problem9) {
+//    print("\nProblem 9")
+//    print("A Pythagorean triplet is a set of three natural numbers, a < b < c, for which, a^2 + b^2 = c^2")
+//    print("For example, 3^2 + 4^2 = 9 + 16 = 25 = 5^2.")
+//    print("There exists exactly one Pythagorean triplet for which a + b + c = 1000.")
+//    print("Find the product abc.")
+//    
+//    func findPythagorianTripletThatSumsTo(_ n: Int) -> Array<Int> {
+//        return [0]
+//    }
+//    
+//    printTestCase(findPythagorianTripletThatSumsTo(12))
+//    printResultCase(findPythagorianTripletThatSumsTo(1000))
+//}
+//
+//// Problem 10
+//if problemMask.contains(.problem10) {
+//    print("\nProblem 10")
+//    print("The sum of the primes below 10 is 2 + 3 + 5 + 7 = 17.")
+//    print("Find the sum of all the primes below two million.")
+//    
+//    func sumPrimesBelow(_ limit: Int) -> Int {
+//        return 0
+//    }
+//    
+//    printTestCase(sumPrimesBelow(12))
+//    printResultCase(sumPrimesBelow(1000))
+//}
