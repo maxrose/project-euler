@@ -337,22 +337,43 @@ if problemMask.contains(.problem8) {
     printResultCase(largestProductOfContinuousDigits(13, largeDigitNumber))
 }
 
-//// Problem 9
-//if problemMask.contains(.problem9) {
-//    print("\nProblem 9")
-//    print("A Pythagorean triplet is a set of three natural numbers, a < b < c, for which, a^2 + b^2 = c^2")
-//    print("For example, 3^2 + 4^2 = 9 + 16 = 25 = 5^2.")
-//    print("There exists exactly one Pythagorean triplet for which a + b + c = 1000.")
-//    print("Find the product abc.")
-//    
-//    func findPythagorianTripletThatSumsTo(_ n: Int) -> Array<Int> {
-//        return [0]
-//    }
-//    
-//    printTestCase(findPythagorianTripletThatSumsTo(12))
-//    printResultCase(findPythagorianTripletThatSumsTo(1000))
-//}
-//
+// Problem 9
+if problemMask.contains(.problem9) {
+    print("\nProblem 9")
+    print("A Pythagorean triplet is a set of three natural numbers, a < b < c, for which, a^2 + b^2 = c^2")
+    print("For example, 3^2 + 4^2 = 9 + 16 = 25 = 5^2.")
+    print("There exists exactly one Pythagorean triplet for which a + b + c = 1000.")
+    print("Find the product abc.")
+    
+    func isPythagoreanTriplet(_ nums: Array<Int>) -> Bool {
+        if nums.count != 3 {
+            return false
+        }
+        return nums[0]*nums[0] + nums[1]*nums[1] == nums[2]*nums[2]
+    }
+    
+    func findPythagorianTripletsThatSumsTo(_ n: Int) -> Array<Array<Int>> {
+        var triplets = Array<Array<Int>>()
+        for a in Int(sqrt(Double(n)))...n/3 {
+            for b in max((n/2-a), a)...n/2 {
+                let c = n - a - b
+                let triplet = [a,b,c]
+                if isPythagoreanTriplet(triplet) {
+                    triplets.append(triplet)
+                    break
+                }
+            }
+            if triplets.count > 0 {
+                break
+            }
+        }
+        return triplets
+    }
+    
+    printTestCase(findPythagorianTripletsThatSumsTo(12))
+    printResultCase(findPythagorianTripletsThatSumsTo(1000))
+}
+
 //// Problem 10
 //if problemMask.contains(.problem10) {
 //    print("\nProblem 10")
