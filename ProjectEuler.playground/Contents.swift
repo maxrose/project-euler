@@ -24,7 +24,8 @@ struct ProblemSelection : OptionSet {
     static let problem15 = ProblemSelection(rawValue: 1 << 14)
     
     static let all: ProblemSelection = [.problem1, .problem2, .problem3, .problem4, .problem5,
-                                        .problem6, .problem7, .problem8, .problem9, .problem10]
+                                        .problem6, .problem7, .problem8, .problem9, .problem10,
+                                        .problem11]
 }
 // To save a little recomputation time, select the problems you'd like to see with the mask
 let problemMask: ProblemSelection = .all
@@ -432,12 +433,68 @@ wrapProblem(problem: .problem11, solution: {
     print("The product of these numbers is 26 × 63 × 78 × 14 = 1788696.")
     print("What is the greatest product of four adjacent numbers in the same direction (up, down, left, right, or diagonally) in the 20×20 grid?")
 
-    func parseGrid(_ gridAsString: String) -> Array<Array<Int>> {
+    func parseGrid(_ gridAsString: String, sequenceLength: Int=4) -> Int {
+        let rows = gridAsString.components(separatedBy: "\n")
         var grid = [[Int]]()
-
-        return grid
+        for stringRow in rows {
+            let components = stringRow.components(separatedBy: " ")
+            var row = [Int]()
+            for c in components {
+                row.append(Int(c)!)
+            }
+            grid.append(row)
+        }
+        
+        var maxProduct = 0
+        var multiple: Int
+        
+        for r in 0...grid.count-1 {
+            for c in 0...grid[r].count-1 {
+                if c <= grid[r].count - sequenceLength {
+                    // check left to right
+                    multiple = 1
+                    for i in 0...sequenceLength-1 {
+                        multiple *= grid[r][c+i]
+                    }
+                    if (multiple > maxProduct) {
+                        maxProduct = multiple
+                    }
+                }
+                if r <= grid.count-1 - sequenceLength {
+                    // check top to bottom
+                    multiple = 1
+                    for i in 0...sequenceLength-1 {
+                        multiple *= grid[r+i][c]
+                    }
+                    if (multiple > maxProduct) {
+                        maxProduct = multiple
+                    }
+                    
+                    if c <= grid[r].count - sequenceLength {
+                        // check diagonal top left to bottom right
+                        multiple = 1
+                        for i in 0...sequenceLength-1 {
+                            multiple *= grid[r+i][c+i]
+                        }
+                        if (multiple > maxProduct) {
+                            maxProduct = multiple
+                        }
+                    }
+                    if c >= sequenceLength-1 {
+                        // check diagonal top right to bottom left
+                        multiple = 1
+                        for i in 0...sequenceLength-1 {
+                            multiple *= grid[r+i][c-i]
+                        }
+                        if (multiple > maxProduct) {
+                            maxProduct = multiple
+                        }
+                    }
+                }
+            }
+        }
+        return maxProduct
     }
-
     printResultCase(parseGrid(gridOfNumbers))
 })
 
