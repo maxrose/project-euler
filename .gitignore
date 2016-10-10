@@ -27,4 +27,5 @@ xcuserdata
 *.hmap
 *.ipa
 
+compiled_playground
 .DS_Store

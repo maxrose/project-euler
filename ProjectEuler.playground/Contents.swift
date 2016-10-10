@@ -25,16 +25,41 @@ struct ProblemSelection : OptionSet {
     
     static let all: ProblemSelection = [.problem1, .problem2, .problem3, .problem4, .problem5,
                                         .problem6, .problem7, .problem8, .problem9, .problem10,
-                                        .problem11]
+                                        .problem11, .problem12, .problem13, .problem14, .problem15]
+    
+    static let problemFives1: ProblemSelection = [.problem1, .problem2, .problem3, .problem4, .problem5]
+    
+    static let problemFives2: ProblemSelection = [.problem6, .problem7, .problem8, .problem9, .problem10]
+    
+    static let problemFives3: ProblemSelection = [.problem11, .problem12, .problem13, .problem14, .problem15]
 }
 // To save a little recomputation time, select the problems you'd like to see with the mask
-let problemMask: ProblemSelection = .all
+let problemMask: ProblemSelection = .problem12
 
-func wrapProblem(problem: ProblemSelection, solution: ()->Void) {
+
+// Prints out formatted outputs.
+func printTestCase(_ result: Any) {
+    print("Sample case:", result)
+}
+func printResultCase(_ result: Any) {
+    print("Application:", result)
+}
+
+func wrapProblem(problem: ProblemSelection, solution: ()->Array<Any>, answerFormatting: (Any)->Any = { (answer) -> Any in return answer }) {
     if problemMask.contains(problem) {
         let start = Date()
-        solution()
-        print("Solution took \(Date().timeIntervalSince(start)) seconds");
+        let answer = solution()
+        let seconds = Date().timeIntervalSince(start)
+        switch answer.count {
+        case 1:
+            printResultCase(answerFormatting(answer.first!))
+        case 2:
+            printTestCase(answerFormatting(answer.first!))
+            printResultCase(answerFormatting(answer.last!))
+        default:
+            print("Couldn't understand answer \(answer)")
+        }
+        print("Solution took \(seconds) seconds");
     }
 }
 
@@ -102,14 +127,6 @@ func intPower(_ base: Int, _ exponent: Int) -> Int {
     return Int(pow(Double(base),Double(exponent)))
 }
 
-// Prints out formatted outputs.
-func printTestCase(_ result: Any) {
-    print("Sample case result:", result)
-}
-func printResultCase(_ result: Any) {
-    print("Application result:", result)
-}
-
 // Problem 1
 wrapProblem(problem: .problem1, solution: {
     print("\nProblem 1")
@@ -134,8 +151,7 @@ wrapProblem(problem: .problem1, solution: {
         return sum
     }
     
-    printTestCase(sumOfProducts(baseValues: Set([3,5]), limit: 10))
-    printResultCase(sumOfProducts(baseValues: Set([3,5]), limit: 1000))
+    return [sumOfProducts(baseValues: Set([3,5]), limit: 10),sumOfProducts(baseValues: Set([3,5]), limit: 1000)]
 })
 
 // Problem 2
@@ -158,8 +174,7 @@ wrapProblem(problem: .problem2, solution: {
         return sum
     }
     
-    printTestCase(sumNumbersAndReturnEvenUnderLimit(num1: 1, num2: 2, lim: 90))
-    printResultCase(sumNumbersAndReturnEvenUnderLimit(num1: 1, num2: 2, lim: 4000000))
+    return [sumNumbersAndReturnEvenUnderLimit(num1: 1, num2: 2, lim: 90), sumNumbersAndReturnEvenUnderLimit(num1: 1, num2: 2, lim: 4000000)]
 })
 
 // Problem 3
@@ -175,8 +190,7 @@ wrapProblem(problem: .problem3, solution: {
         return primeFactors.first!
     }
     
-    printTestCase(largestPrimeFactorOf(13195))
-    printResultCase(largestPrimeFactorOf(600851475143))
+    return [largestPrimeFactorOf(13195), largestPrimeFactorOf(600851475143)]
 })
 
 // Problem 4
@@ -233,8 +247,7 @@ wrapProblem(problem: .problem4, solution: {
         return maxPalindrome
     }
     
-    printTestCase(largestPalindromicProduct(numDigits: 2))
-    printResultCase(largestPalindromicProduct(numDigits: 3))
+    return [largestPalindromicProduct(numDigits: 2), largestPalindromicProduct(numDigits: 3)]
 })
 
 // Problem 5
@@ -276,8 +289,7 @@ wrapProblem(problem: .problem5, solution: {
         return product
     }
     
-    printTestCase(smallestNumberDivisibleByValuesUpTo(10))
-    printResultCase(smallestNumberDivisibleByValuesUpTo(20))
+    return [smallestNumberDivisibleByValuesUpTo(10), smallestNumberDivisibleByValuesUpTo(20)]
 })
 
 // Problem 6
@@ -302,8 +314,8 @@ wrapProblem(problem: .problem6, solution: {
         return squareSum(values) - sumSquares(values)
     }
     
-    printTestCase(differenceOfSquaresUpTo(10))
-    printResultCase(differenceOfSquaresUpTo(100))
+    return [differenceOfSquaresUpTo(10),
+            differenceOfSquaresUpTo(100)]
 })
 
 // Problem 7
@@ -332,8 +344,10 @@ wrapProblem(problem: .problem7, solution: {
         return primes.last!
     }
     
-    printTestCase(nthPrime(6)) // 13
-    printResultCase(nthPrime(10001)) // 104743
+    return [
+        nthPrime(6), // 13
+        nthPrime(10001) // 104743
+    ]
 })
 
 // Problem 8
@@ -369,8 +383,10 @@ wrapProblem(problem: .problem8, solution: {
         return maxProduct
     }
     
-    printTestCase(largestProductOfContinuousDigits(4, largeDigitNumber))
-    printResultCase(largestProductOfContinuousDigits(13, largeDigitNumber))
+    return [
+        largestProductOfContinuousDigits(4, largeDigitNumber),
+        largestProductOfContinuousDigits(13, largeDigitNumber)
+    ]
 })
 
 // Problem 9
@@ -406,8 +422,8 @@ wrapProblem(problem: .problem9, solution: {
         return triplets
     }
     
-    printTestCase(findPythagorianTripletsThatSumsTo(12).first!.reduce(1, *))
-    printResultCase(findPythagorianTripletsThatSumsTo(1000).first!.reduce(1, *))
+    return [findPythagorianTripletsThatSumsTo(12).first!.reduce(1, *),
+            findPythagorianTripletsThatSumsTo(1000).first!.reduce(1, *)]
 })
 
 // Problem 10
@@ -420,8 +436,10 @@ wrapProblem(problem: .problem10, solution: {
         return primes(upTo: limit).reduce(0, +)
     }
 
-    printTestCase(sumPrimesBelow(10)) // 17
-    printResultCase(sumPrimesBelow(2000000)) // 142913828922
+    return [
+        sumPrimesBelow(10), // 17
+        sumPrimesBelow(2000000) // 142913828922
+    ]
 })
 
 // Problem 11
@@ -495,7 +513,7 @@ wrapProblem(problem: .problem11, solution: {
         }
         return maxProduct
     }
-    printResultCase(parseGrid(gridOfNumbers))
+    return [parseGrid(gridOfNumbers)]
 })
 
 // Problem 12
@@ -514,18 +532,37 @@ wrapProblem(problem: .problem12, solution: {
     print("We can see that 28 is the first triangle number to have over five divisors.")
     print("What is the value of the first triangle number to have over five hundred divisors?")
 
-    func uniqueDivisorsOfNumber(_ num: Int) -> Array<Int> {
-        var divisors = [Int]()
-
+    func uniqueDivisorsOfNumber(_ num: Int) -> Set<Int> {
+        var divisors = Set<Int>()
+        
+        var divisor = 1
+        while divisor <= num {
+            if num % divisor == 0 {
+                divisors.insert(divisor)
+            }
+            divisor += 1
+        }
+        
         return divisors
     }
 
     func firstTriangleNumber(withDivisorCount count: Int) -> Int {
-        return 0
+        var triangleNumber = 0
+        var n = 0
+        
+        var currentCount = 0
+        while currentCount < count {
+            triangleNumber += n
+                n += 1
+            let divisors = uniqueDivisorsOfNumber(triangleNumber)
+            currentCount = divisors.count
+            print("triangle number \(n) is \(triangleNumber) which has \(currentCount) divisors: \(divisors)")
+        }
+        return triangleNumber
     }
 
-    printTestCase(firstTriangleNumber(withDivisorCount: 5))
-    printResultCase(firstTriangleNumber(withDivisorCount: 500))
+    return [firstTriangleNumber(withDivisorCount: 5),
+            firstTriangleNumber(withDivisorCount: 500)]
 })
 
 // Problem 13
@@ -533,14 +570,76 @@ wrapProblem(problem: .problem13, solution: {
     print("\nProblem 13")
     print("Work out the first ten digits of the sum of the following one-hundred 50-digit numbers.")
     let fiftyDigitNumbers = "37107287533902102798797998220837590246510135740250\n46376937677490009712648124896970078050417018260538\n74324986199524741059474233309513058123726617309629\n91942213363574161572522430563301811072406154908250\n23067588207539346171171980310421047513778063246676\n89261670696623633820136378418383684178734361726757\n28112879812849979408065481931592621691275889832738\n44274228917432520321923589422876796487670272189318\n47451445736001306439091167216856844588711603153276\n70386486105843025439939619828917593665686757934951\n62176457141856560629502157223196586755079324193331\n64906352462741904929101432445813822663347944758178\n92575867718337217661963751590579239728245598838407\n58203565325359399008402633568948830189458628227828\n80181199384826282014278194139940567587151170094390\n35398664372827112653829987240784473053190104293586\n86515506006295864861532075273371959191420517255829\n71693888707715466499115593487603532921714970056938\n54370070576826684624621495650076471787294438377604\n53282654108756828443191190634694037855217779295145\n36123272525000296071075082563815656710885258350721\n45876576172410976447339110607218265236877223636045\n17423706905851860660448207621209813287860733969412\n81142660418086830619328460811191061556940512689692\n51934325451728388641918047049293215058642563049483\n62467221648435076201727918039944693004732956340691\n15732444386908125794514089057706229429197107928209\n55037687525678773091862540744969844508330393682126\n18336384825330154686196124348767681297534375946515\n80386287592878490201521685554828717201219257766954\n78182833757993103614740356856449095527097864797581\n16726320100436897842553539920931837441497806860984\n48403098129077791799088218795327364475675590848030\n87086987551392711854517078544161852424320693150332\n59959406895756536782107074926966537676326235447210\n69793950679652694742597709739166693763042633987085\n41052684708299085211399427365734116182760315001271\n65378607361501080857009149939512557028198746004375\n35829035317434717326932123578154982629742552737307\n94953759765105305946966067683156574377167401875275\n88902802571733229619176668713819931811048770190271\n25267680276078003013678680992525463401061632866526\n36270218540497705585629946580636237993140746255962\n24074486908231174977792365466257246923322810917141\n91430288197103288597806669760892938638285025333403\n34413065578016127815921815005561868836468420090470\n23053081172816430487623791969842487255036638784583\n11487696932154902810424020138335124462181441773470\n63783299490636259666498587618221225225512486764533\n67720186971698544312419572409913959008952310058822\n95548255300263520781532296796249481641953868218774\n76085327132285723110424803456124867697064507995236\n37774242535411291684276865538926205024910326572967\n23701913275725675285653248258265463092207058596522\n29798860272258331913126375147341994889534765745501\n18495701454879288984856827726077713721403798879715\n38298203783031473527721580348144513491373226651381\n34829543829199918180278916522431027392251122869539\n40957953066405232632538044100059654939159879593635\n29746152185502371307642255121183693803580388584903\n41698116222072977186158236678424689157993532961922\n62467957194401269043877107275048102390895523597457\n23189706772547915061505504953922979530901129967519\n86188088225875314529584099251203829009407770775672\n11306739708304724483816533873502340845647058077308\n82959174767140363198008187129011875491310547126581\n97623331044818386269515456334926366572897563400500\n42846280183517070527831839425882145521227251250327\n55121603546981200581762165212827652751691296897789\n32238195734329339946437501907836945765883352399886\n75506164965184775180738168837861091527357929701337\n62177842752192623401942399639168044983993173312731\n32924185707147349566916674687634660915035914677504\n99518671430235219628894890102423325116913619626622\n73267460800591547471830798392868535206946944540724\n76841822524674417161514036427982273348055556214818\n97142617910342598647204516893989422179826088076852\n87783646182799346313767754307809363333018982642090\n10848802521674670883215120185883543223812876952786\n71329612474782464538636993009049310363619763878039\n62184073572399794223406235393808339651327408011116\n66627891981488087797941876876144230030984490851411\n60661826293682836764744779239180335110989069790714\n85786944089552990653640447425576083659976645795096\n66024396409905389607120198219976047599490197230297\n64913982680032973156037120041377903785566085089252\n16730939319872750275468906903707539413042652315011\n94809377245048795150954100921645863754710598436791\n78639167021187492431995700641917969777599028300699\n15368713711936614952811305876380278410754449733078\n40789923115535562561142322423255033685442488917353\n44889911501440648020369068063960672322193204149535\n41503128880339536053299340368006977710650566631954\n81234880673210146739058568557934581403627822703280\n82616570773948327592232845941706525094512325230608\n22918802058777319719839450180888072429661980811197\n77158542502016545090413245809786882778948721859617\n72107838435069186155435662884062257473692284509516\n20849603980134001723930671666823555245252804609722\n53503534226472524250874054075591789781264330331690"
-
-    func parseSringIntoArray() -> Array<Array<Int>> {
-        var numberArrays = Array(repeating:Array(repeating:0, count:50), count:100)
-
-        return numberArrays
+    
+    func convertStringToIntArray(_ s: String) -> [Int] {
+        var numbers = [Int]()
+        for i in 0...s.characters.count-1 {
+            let start = s.index(s.startIndex, offsetBy: i)
+            let stop  = s.index(s.startIndex, offsetBy: i + 1)
+            let slice = s.substring(with: Range(start..<stop))
+            numbers.append(Int(slice)!)
+        }
+        return numbers.reversed()
     }
 
-    printResultCase(parseSringIntoArray())
+    func parseSringIntoArray(_ numbers: String, _ separator: String) -> [[Int]] {
+        let numberStrings = numbers.components(separatedBy: separator)
+        return numberStrings.map(convertStringToIntArray)
+    }
+    
+    func first(nDigits count: Int, ofString s: String, separator: String = "\n") -> [Any] {
+        var numbers = parseSringIntoArray(s, separator)
+        var digits = [Int]()
+        var remainder = [Int]()
+        
+        func indexWithinLargestSubArray(index: Int, intArray: [[Int]]) -> Bool {
+            for subArray in intArray {
+                if index < subArray.count {
+                    return true
+                }
+            }
+            return false
+        }
+        
+        var digitIndex = 0
+        while indexWithinLargestSubArray(index: digitIndex, intArray: numbers) || remainder.count > 0  {
+            var sum = 0
+            for i in 0...numbers.count-1 {
+                if numbers[i].count > digitIndex {
+                    sum += numbers[i][digitIndex]
+                }
+            }
+            if remainder.count > 0 {
+                sum += remainder.first!
+                remainder.removeFirst()
+            }
+            digits.append(sum%10)
+            
+            var remainderDigit = 0
+            while sum >= 1 {
+                sum /= 10
+                if remainder.count > remainderDigit {
+                    remainder[remainderDigit] += sum%10
+                }
+                else {
+                    remainder.append(sum%10)
+                }
+                remainderDigit += 1
+            }
+            digitIndex += 1
+        }
+        digits.reverse()
+        while digits.count > 0 && digits.first! == 0 {
+            digits.removeFirst()
+        }
+        
+        return [count, digits.dropLast((digits.count > count) ? digits.count - count : 0)]
+    }
+    
+    return [first(nDigits: 10, ofString: fiftyDigitNumbers)]
+    }, answerFormatting: { (answer) -> Any in
+        let countAndDigits = answer as! [Any]
+        return "The first \(countAndDigits.first!) digits of the sum of input numbers are \(countAndDigits.last!)"
 })
 
 // Problem 14
@@ -554,24 +653,80 @@ wrapProblem(problem: .problem14, solution: {
     print("It can be seen that this sequence (starting at 13 and finishing at 1) contains 10 terms. Although it has not been proved yet (Collatz Problem), it is thought that all starting numbers finish at 1.")
     print("Which starting number, under one million, produces the longest chain?")
     print("Once the chain starts the terms are allowed to go above one million.")
-
-    printTestCase(0)
-    printResultCase(0)
+    
+    // Odd: next = 3*n + 1
+    // Even: next = n/2
+    // Reverse order
+    // Odd: prev = 2 * n
+    // Even: prev = 2 * n || (n-1)/3
+    
+    func nextStepInSequence(_ n: Int) -> Int {
+        if n%2 == 0 {
+            return n/2
+        }
+        return 3*n + 1
+    }
+    var cachedCounts = [Int: Int]()
+    
+    func lengthOfIterativeSequence(forNumber n: Int) -> Int {
+        if n == 1 {
+            return 1
+        }
+        if cachedCounts[n] != nil {
+            return cachedCounts[n]!
+        }
+        let length = 1 + lengthOfIterativeSequence(forNumber: nextStepInSequence(n))
+        cachedCounts[n] = length
+        return length
+    }
+    
+    func longestIterativeSequence(upTo cap: Int) -> [Int] {
+        
+        var largestSequence = 1
+        var largestSequenceTrigger = 1
+        for n in 2...cap-1 {
+            let seqLen = lengthOfIterativeSequence(forNumber: n)
+            if seqLen > largestSequence {
+                largestSequence = seqLen
+                largestSequenceTrigger = n
+            }
+        }
+        return [largestSequenceTrigger, largestSequence]
+    }
+    
+    return [[13, lengthOfIterativeSequence(forNumber: 13)],
+            longestIterativeSequence(upTo:1000000)] // 837799 : 525
+    }, answerFormatting: { (answer) -> Any in
+        let a = answer as! [Int]
+        return "Starting at \(a.first!) the sequence length will be \(a.last!)"
 })
 
 // Problem 15
 wrapProblem(problem: .problem15, solution: {
     print("\nProblem 15")
     print("Starting in the top left corner of a 2×2 grid, and only being able to move to the right and down, there are exactly 6 routes to the bottom right corner.")
-    print(" →, →, ↓, ↓")
-    print(" →, ↓, →, ↓")
-    print(" →, ↓, ↓, →")
-    print(" ↓, →, ↓, →")
-    print(" ↓, ↓, →, →")
+    print(" 1 →, →, ↓, ↓")
+    print(" 2 →, ↓, →, ↓")
+    print(" 3 →, ↓, ↓, →")
+    print(" 4 ↓, →, →, ↓")
+    print(" 5 ↓, →, ↓, →")
+    print(" 6 ↓, ↓, →, →")
     print("How many such routes are there through a 20×20 grid?")
+    
+    // For a NxM grid there are N+M required moves. N → and M ↓.
+    // Starting with all of one arranged on the left we can count each available pattern by moving to the right
+    
+    func countTotalUniquePathsForASquareGrid(n: Int) -> Int {
+        // n+1 -> 0 sum
+        var count = 0
+        for i in 1...n+1 {
+            count += i
+        }
+        return count
+    }
 
-    printTestCase(0)
-    printResultCase(0)
+    return [countTotalUniquePathsForASquareGrid(n: 2),
+            countTotalUniquePathsForASquareGrid(n: 20)]
 })
 
 /*
@@ -580,7 +735,6 @@ wrapProblem(problem: .problem<#n#>, solution: {
     print("\nProblem <#n#>")
     print("<#description#>")
 
-    printTestCase(0)
-    printResultCase(0)
+    return []
 })
  */
