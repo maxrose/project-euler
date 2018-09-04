@@ -22,6 +22,11 @@ struct ProblemSelection : OptionSet {
     static let problem13 = ProblemSelection(rawValue: 1 << 12)
     static let problem14 = ProblemSelection(rawValue: 1 << 13)
     static let problem15 = ProblemSelection(rawValue: 1 << 14)
+    static let problem16 = ProblemSelection(rawValue: 1 << 15)
+    static let problem17 = ProblemSelection(rawValue: 1 << 16)
+    static let problem18 = ProblemSelection(rawValue: 1 << 17)
+    static let problem19 = ProblemSelection(rawValue: 1 << 18)
+    static let problem20 = ProblemSelection(rawValue: 1 << 19)
     
     static let all: ProblemSelection = [.problem1, .problem2, .problem3, .problem4, .problem5,
                                         .problem6, .problem7, .problem8, .problem9, .problem10,
@@ -34,7 +39,9 @@ struct ProblemSelection : OptionSet {
     static let problemFives3: ProblemSelection = [.problem11, .problem12, .problem13, .problem14, .problem15]
 }
 // To save a little recomputation time, select the problems you'd like to see with the mask
-let problemMask: ProblemSelection = .problem12
+let problemMask: ProblemSelection = [.problem1, .problem2, .problem3, .problem4, .problem5,
+                                     .problem6, .problem7, .problem8, .problem9, .problem10,
+                                     .problem11, .problem13, .problem14]
 
 
 // Prints out formatted outputs.
@@ -552,11 +559,11 @@ wrapProblem(problem: .problem12, solution: {
         
         var currentCount = 0
         while currentCount < count {
+            n += 1
             triangleNumber += n
-                n += 1
             let divisors = uniqueDivisorsOfNumber(triangleNumber)
             currentCount = divisors.count
-            print("triangle number \(n) is \(triangleNumber) which has \(currentCount) divisors: \(divisors)")
+            print("triangle number \(n) is \(triangleNumber) which has \(currentCount) divisors: \(divisors.sorted()), prime factors: \(primeFactorsOf(triangleNumber))")
         }
         return triangleNumber
     }
@@ -728,6 +735,144 @@ wrapProblem(problem: .problem15, solution: {
     return [countTotalUniquePathsForASquareGrid(n: 2),
             countTotalUniquePathsForASquareGrid(n: 20)]
 })
+
+
+// Problem 16
+wrapProblem(problem: .problem16, solution: {
+    print("\nProblem 16")
+    print("2^15 = 32768 and the sum of its digits is 3 + 2 + 7 + 6 + 8 = 26.")
+    print("What is the sum of the digits of the number 2^1000?")
+    
+    return []
+})
+
+ // Problem 17
+ wrapProblem(problem: .problem17, solution: {
+ print("\nProblem 17")
+    print("If the numbers 1 to 5 are written out in words: one, two, three, four, five, then there are 3 + 3 + 5 + 4 + 4 = 19 letters used in total.")
+    print("If all the numbers from 1 to 1000 (one thousand) inclusive were written out in words, how many letters would be used?")
+    print("NOTE: Do not count spaces or hyphens. For example, 342 (three hundred and forty-two) contains 23 letters and 115 (one hundred and fifteen) contains 20 letters. The use of \"and\" when writing out numbers is in compliance with British usage.")
+ 
+ return []
+ })
+
+ // Problem 18
+ wrapProblem(problem: .problem18, solution: {
+ print("\nProblem 18")
+    print("By starting at the top of the triangle below and moving to adjacent numbers on the row below, the maximum total from top to bottom is 23.")
+    print("     3")
+    print("    7 4")
+    print("   2 4 6")
+    print("  8 5 9 3")
+    print("That is, 3 + 7 + 4 + 9 = 23.")
+    print("That is, 3 + 7 + 4 + 9 = 23.")
+    print("Find the maximum total from top to bottom of the triangle below:")
+    print("                            75")
+    print("                          95  64")
+    print("                        17  47  82")
+    print("                      18  35  87  10")
+    print("                    20  04  82  47  65")
+    print("                  19  01  23  75  03  34")
+    print("                88  02  77  73  07  63  67")
+    print("              99  65  04  28  06  16  70  92")
+    print("            41  41  26  56  83  40  80  70  33")
+    print("          41  48  72  33  47  32  37  16  94  29")
+    print("        53  71  44  65  25  43  91  52  97  51  14")
+    print("      70  11  33  28  77  73  17  78  39  68  17  57")
+    print("    91  71  52  38  17  14  91  43  58  50  27  29  48")
+    print("  63  66  04  68  89  53  67  30  73  16  69  87  40  31")
+    print("04  62  98  27  23  09  70  98  73  93  38  53  60  40  23")
+    
+    class Node {
+        let val: Int
+        var _left: Node?
+        var left: Node? {
+            set {
+                _left?.parentRight = nil
+                _left = newValue
+                _left?.parentRight = self
+            }
+            get {
+                return _left
+            }
+        }
+        var _right: Node?
+        var right: Node? {
+            set {
+                _right?.parentLeft = nil
+                _right = newValue
+                _right?.parentLeft = self
+            }
+            get {
+                return _right
+            }
+        }
+        weak var parentRight: Node?
+        weak var parentLeft: Node?
+        
+        init(_ val: Int, _ left: Node?, _ right: Node?) {
+            self.val = val
+            self.left = left
+            self.right = right
+        }
+        
+        convenience init(_ val: Int) {
+            self.init(val, nil, nil)
+        }
+        
+        static func treeWithRootNode(from stringRepresentation: String) -> Node? {
+            let rows = stringRepresentation.components(separatedBy: "\n")
+            var nodes = [[Int]]()
+            for i in 0...rows.count-1 {
+                nodes.append([Int]())
+                nodes[i] = rows[i].components(separatedBy: " ").map({ (s) -> Int in
+                    return Int(s)!
+                })
+            }
+            
+            for row in nodes.reversed() {
+                for i in 0...row.count-1 {
+                    let node = Node(row[i])
+                }
+            }
+        }
+    }
+ 
+ return []
+ })
+
+ // Problem 19
+ wrapProblem(problem: .problem19, solution: {
+    print("\nProblem 19")
+    print("You are given the following information, but you may prefer to do some research for yourself.")
+    print("* 1 Jan 1900 was a Monday.")
+    print("* Thirty days has September,")
+    print("  April, June and November.")
+    print("  All the rest have thirty-one,")
+    print("  Saving February alone,")
+    print("  Which has twenty-eight, rain or shine.")
+    print("  And on leap years, twenty-nine.")
+    print("* A leap year occurs on any year evenly divisible by 4, but not on a century unless it is divisible by 400.")
+    print("How many Sundays fell on the first of the month during the twentieth century (1 Jan 1901 to 31 Dec 2000)?")
+    
+    
+    
+    
+    
+ 
+ return []
+ })
+
+ // Problem 20
+ wrapProblem(problem: .problem20, solution: {
+ print("\nProblem 20")
+    print("n! means n × (n − 1) × ... × 3 × 2 × 1")
+    print("For example, 10! = 10 × 9 × ... × 3 × 2 × 1 = 3628800,")
+    print("and the sum of the digits in the number 10! is 3 + 6 + 2 + 8 + 8 + 0 + 0 = 27.")
+    print("Find the sum of the digits in the number 100!")
+ 
+ return []
+ })
 
 /*
 // Problem <# n #>
